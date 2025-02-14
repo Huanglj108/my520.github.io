@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情人节滚动动画相册</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #e74c3c;
+            margin: 20px 0;
+        }
+        .photo-container {
+            margin: 20px auto;
+            max-width: 90%;
+            opacity: 0; /* 初始隐藏 */
+            transform: translateY(20px); /* 初始位置偏移 */
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .photo-container.active {
+            opacity: 1; /* 显示元素 */
+            transform: translateY(0); /* 重置位置 */
+        }
+        .photo {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .caption {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+        audio {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 300px;
+            display: none; /* 初始隐藏播放器 */
+        }
+        .play-hint {
+            font-size: 16px;
+            color: #666;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        /* 定义不同的动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        @keyframes rotateIn {
+            from { transform: rotate(-180deg); }
+            to { transform: rotate(0); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* 为每个容器分配不同动画 */
+        .photo-container:nth-child(1).active { animation: fadeIn 1s ease; }
+        .photo-container:nth-child(2).active { animation: slideInLeft 1s ease; }
+        .photo-container:nth-child(3).active { animation: slideInRight 1s ease; }
+        .photo-container:nth-child(4).active { animation: zoomIn 1s ease; }
+        .photo-container:nth-child(5).active { animation: rotateIn 1s ease; }
+        .photo-container:nth-child(6).active { animation: bounceIn 1s ease; }
+    </style>
+</head>
+<body>
+    <h1>我们的情人节相册</h1>
+    <div class="play-hint">点击页面播放音乐 🎵</div>
+    <audio id="background-music" loop>
+        <source src="https://m704.music.126.net/20250214175239/e6773d7ecba9f0bac7d41cbb2683cbc8/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/36124132279/4c4f/550f/26a1/a4e48f4866f580b77a50601356f6c929.m4a?vuutv=nR4lEOR7qmOMaco6IUklGXNDHHjkyPiiPzicm+mET8MNNkaTI5rOUWkpwoKYy4kIXnldV1EEG9C3nZLvlQO5+N+nYUdHVlHBi2ognLmrdQE=&authSecret=0000019503c901f30c020a30856708ef" type="audio/mpeg">
+        您的浏览器不支持音频元素。
+    </audio>
+    <div class="photo-container">
+        <img src="https://i.postimg.cc/59mQMPC8/4520.jpg" alt="照片1" class="photo">
+        <p class="caption">这是我第一次做相册的开始💕</p>
+    </div>
+    <div class="photo-container">
+        <img src="https://i.postimg.cc/0Q0jPQb9/20250214154618.jpg" alt="照片2" class="photo">
+        <p class="caption">和你在一起的每一天都很特别🌹</p>
+    </div>
+    <div class="photo-container">
+        <img src="https://i.postimg.cc/gc4j7nCD/20250214154643.jpg" alt="照片3" class="photo">
+        <p class="caption">期待未来的每一个情人节💖</p>
+    </div>
+    <div class="photo-container">
+        <img src="https://i.postimg.cc/xT4C0BTN/20250214154704.jpg" alt="照片4" class="photo">
+        <p class="caption">我们的回忆，永远珍藏💞</p>
+    </div>
+    <div class="photo-container">
+        <img src="https://i.postimg.cc/5twNS058/20250214154711.jpg" alt="照片5" class="photo">
+        <p class="caption">爱在每一个瞬间💓</p>
+    </div>
+    <div class="photo-container">
+        <img src="https://i.postimg.cc/Kzxcq2Qw/20250214154804.jpg" alt="照片6" class="photo">
+        <p class="caption">未来的路，我们一起走💑</p>
+    </div>
+
+    <script>
+        // 监听页面点击事件
+        document.addEventListener('click', () => {
+            const audio = document.getElementById('background-music');
+            if (audio.paused) {
+                audio.play(); // 播放音乐
+                document.querySelector('.play-hint').style.display = 'none'; // 隐藏提示
+            }
+        });
+
+        // 使用 Intersection Observer 监听元素进入视口
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active'); // 添加动画类
+                }
+            });
+        }, {
+            root: null, // 监听相对于视口的交叉状态
+            rootMargin: '0px',
+            threshold: 0.5 // 当元素 50% 进入视口时触发
+        });
+
+        // 监听所有图片容器
+        document.querySelectorAll('.photo-container').forEach(container => {
+            observer.observe(container);
+        });
+    </script>
+</body>
+</html>
